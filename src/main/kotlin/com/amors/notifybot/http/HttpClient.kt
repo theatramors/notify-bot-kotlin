@@ -18,15 +18,18 @@ class HttpClient(private val url: String) {
      * Makes HTTP POST request
      *
      * @param body request body
+     * @param headers HTTP headers
      * @return response body as string
      */
-    fun post(body: String): String {
+    fun post(body: String, headers: Map<String, String> = emptyMap()): String {
         logger.info("Sending POST request to $url")
 
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.doInput = true
         connection.doOutput = true
+
+        headers.forEach { connection.setRequestProperty(it.key, it.value) }
 
         logger.info("Request body is $body")
 
