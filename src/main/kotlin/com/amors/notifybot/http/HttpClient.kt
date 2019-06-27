@@ -7,11 +7,20 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * Class for HTTP requests
+ */
 class HttpClient(private val url: String) {
 
     private val logger: Logger = LoggerFactory.getLogger(HttpClient::class.java)
 
-    fun post(body: String) {
+    /**
+     * Makes HTTP POST request
+     *
+     * @param body request body
+     * @return response body as string
+     */
+    fun post(body: String): String {
         logger.info("Sending POST request to $url")
 
         val connection = URL(url).openConnection() as HttpURLConnection
@@ -31,8 +40,7 @@ class HttpClient(private val url: String) {
                 response.append(line.trim { it <= ' ' })
             }
             logger.info("Request response is $response")
+            return response.toString()
         }
-
-        connection.connect()
     }
 }
