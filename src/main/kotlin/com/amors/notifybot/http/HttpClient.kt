@@ -3,6 +3,7 @@ package com.amors.notifybot.http
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -37,7 +38,13 @@ class HttpClient(private val url: String) {
             outputStream.write(body.toByteArray(Charsets.UTF_8), 0, body.length)
         }
 
-        BufferedReader(InputStreamReader(connection.inputStream)).use { bufferedReader ->
+        val inputStream = try {
+            connection.inputStream
+        } catch (ex: IOException) {
+            connection.errorStream
+        }
+
+        BufferedReader(InputStreamReader(inputStream)).use { bufferedReader ->
             val response = StringBuilder()
             bufferedReader.lines().forEach { line ->
                 response.append(line.trim { it <= ' ' })
