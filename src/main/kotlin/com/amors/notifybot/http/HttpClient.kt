@@ -10,6 +10,8 @@ import java.net.URL
 
 /**
  * Class for HTTP requests
+ *
+ * @author theatramors
  */
 class HttpClient(private val url: String) {
 
