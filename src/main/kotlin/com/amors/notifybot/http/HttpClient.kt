@@ -16,6 +16,35 @@ class HttpClient(private val url: String) {
     private val logger: Logger = LoggerFactory.getLogger(HttpClient::class.java)
 
     /**
+     * Makes HTTP GET request
+     *
+     * @param headers HTTP headers
+     * @return response body as string
+     */
+    fun get(headers: Map<String, String> = emptyMap()): String {
+        logger.info("Sending GET request to $url")
+
+        val connection = URL(url).openConnection() as HttpURLConnection
+
+        headers.forEach { connection.setRequestProperty(it.key, it.value) }
+
+        val inputStream = try {
+            connection.inputStream
+        } catch (ex: IOException) {
+            connection.errorStream
+        }
+
+        BufferedReader(InputStreamReader(inputStream)).use { bufferedReader ->
+            val response = StringBuilder()
+            bufferedReader.lines().forEach { line ->
+                response.append(line.trim { it <= ' ' })
+            }
+            logger.info("Request response is $response")
+            return response.toString()
+        }
+    }
+
+    /**
      * Makes HTTP POST request
      *
      * @param body request body
