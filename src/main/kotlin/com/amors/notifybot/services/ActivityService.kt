@@ -3,14 +3,12 @@ package com.amors.notifybot.services
 import com.amors.notifybot.dto.Activity
 import com.amors.notifybot.dto.Attachment
 import com.amors.notifybot.dto.CardImage
-import com.amors.notifybot.dto.ChannelAccount
 import com.amors.notifybot.dto.HeroCard
 import com.amors.notifybot.enums.ActivityTypes
 import com.amors.notifybot.enums.AttachmentContentTypes
 import com.amors.notifybot.enums.Commands
 import com.amors.notifybot.http.HttpClient
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Service
 
 @Service
