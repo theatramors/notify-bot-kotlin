@@ -7,6 +7,7 @@ import com.amors.notifybot.dto.ChannelAccount
 import com.amors.notifybot.dto.HeroCard
 import com.amors.notifybot.enums.ActivityTypes
 import com.amors.notifybot.enums.AttachmentContentTypes
+import com.amors.notifybot.enums.Commands
 import com.amors.notifybot.http.HttpClient
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -36,20 +37,11 @@ class ActivityService(
             activity.text?.let { text ->
                 val textArr = text.split(" ")
                 when(textArr[commandIndex].toLowerCase()) {
-                    "welcome" -> sendWelcomeActivity(url)
-                    "help" -> sendHelpActivity(url)
-                    "members" -> sendMembersList(activity)
-                    "sendmeaduck" -> sendDuckActivity(url)
-                    else -> {
-                        val body = objectMapper.writeValueAsString(Activity(
-                            type = ActivityTypes.MESSAGE.type,
-                            text = "Unknown command: ${textArr[commandIndex]}"
-                        ))
-
-                        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
-
-                        HttpClient(url).post(body, headers)
-                    }
+                    Commands.WELCOME.text -> sendWelcomeActivity(url)
+                    Commands.HELP.text -> sendHelpActivity(url)
+                    Commands.CHECK.text -> sendHelpActivity(url)
+                    Commands.SEND_ME_A_DUCK.text -> sendDuckActivity(url)
+                    else -> sendDefaultActivity(url, textArr[commandIndex])
                 }
             }
         }
@@ -79,7 +71,7 @@ class ActivityService(
                 contentType = AttachmentContentTypes.HERO.type,
                 content = HeroCard(
                     title = "Available commands",
-                    text = "welcome, help, sendmeaduck"
+                    text = Commands.values().joinToString(", ") { it.text }
                 )
             ))
         ))
@@ -87,19 +79,6 @@ class ActivityService(
         val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
 
         HttpClient(url).post(body, headers)
-    }
-
-    private fun sendMembersList(activity: Activity) {
-        val conversation = activity.conversation!!
-        val url = "${activity.serviceUrl}v3/conversations/${conversation.id}/members"
-        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
-
-        val members = objectMapper.readValue<List<ChannelAccount>>(HttpClient(url).get(headers))
-
-        HttpClient("${activity.serviceUrl}v3/conversations/${conversation.id}/activities").post(objectMapper.writeValueAsString(Activity(
-            type = ActivityTypes.MESSAGE.type,
-            text = members.joinToString(",") { "${it.id}" }
-        )), headers)
     }
 
     private fun sendDuckActivity(url: String) {
@@ -116,6 +95,17 @@ class ActivityService(
                     ))
                 )
             ))
+        ))
+
+        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
+
+        HttpClient(url).post(body, headers)
+    }
+
+    private fun sendDefaultActivity(url: String, command: String) {
+        val body = objectMapper.writeValueAsString(Activity(
+            type = ActivityTypes.MESSAGE.type,
+            text = "Unknown command: $command"
         ))
 
         val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
