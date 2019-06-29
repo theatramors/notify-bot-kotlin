@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: test-alpha, test-beta
+
+---
+
+spring:
+  profiles: test-alpha
+  main:
+    banner-mode: 'console'
+
+---
+
+spring:
+  profiles: test-beta
+  main:
+    banner-mode: 'off'
