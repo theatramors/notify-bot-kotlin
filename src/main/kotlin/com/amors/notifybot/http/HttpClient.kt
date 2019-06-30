@@ -23,7 +23,7 @@ class HttpClient(private val url: String) {
      * @param headers HTTP headers
      * @return response body as string
      */
-    fun get(headers: Map<String, String> = emptyMap()): String {
+    fun get(url: String = this.url, headers: Map<String, String> = emptyMap()): String {
         logger.info("Sending GET request to $url")
 
         val connection = URL(url).openConnection() as HttpURLConnection
@@ -53,7 +53,7 @@ class HttpClient(private val url: String) {
      * @param headers HTTP headers
      * @return response body as string
      */
-    fun post(body: String, headers: Map<String, String> = emptyMap()): String {
+    fun post(url: String = this.url, body: String, headers: Map<String, String> = emptyMap()): String {
         logger.info("Sending POST request to $url")
 
         val connection = URL(url).openConnection() as HttpURLConnection

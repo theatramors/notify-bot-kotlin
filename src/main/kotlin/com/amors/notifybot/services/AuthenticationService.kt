@@ -39,6 +39,6 @@ class AuthenticationService(
 
         val headers = mapOf("Content-Type" to "application/x-www-form-urlencoded")
 
-        return objectMapper.readValue(HttpClient(url).post(body, headers), AuthenticationResponse::class.java)
+        return objectMapper.readValue(HttpClient(url).post(body = body, headers = headers), AuthenticationResponse::class.java)
     }
 }

@@ -59,7 +59,7 @@ class ActivityService(
 
         val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
 
-        HttpClient(url).post(body, headers)
+        HttpClient(url).post(body = body, headers = headers)
     }
 
     private fun sendHelpActivity(url: String) {
@@ -76,7 +76,7 @@ class ActivityService(
 
         val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
 
-        HttpClient(url).post(body, headers)
+        HttpClient(url).post(body = body, headers = headers)
     }
 
     private fun sendDuckActivity(url: String) {
@@ -97,7 +97,7 @@ class ActivityService(
 
         val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
 
-        HttpClient(url).post(body, headers)
+        HttpClient(url).post(body = body, headers = headers)
     }
 
     private fun sendDefaultActivity(url: String, command: String) {
@@ -108,6 +108,6 @@ class ActivityService(
 
         val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
 
-        HttpClient(url).post(body, headers)
+        HttpClient(url).post(body = body, headers = headers)
     }
 }
