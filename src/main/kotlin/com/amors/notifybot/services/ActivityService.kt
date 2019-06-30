@@ -9,6 +9,7 @@ import com.amors.notifybot.enums.AttachmentContentTypes
 import com.amors.notifybot.enums.Commands
 import com.amors.notifybot.http.HttpClient
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
 
 @Service
@@ -57,7 +58,8 @@ class ActivityService(
             ))
         ))
 
-        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
+        val authenticationResponse = authenticationService.authenticate()
+        val headers = mapOf(HttpHeaders.AUTHORIZATION to "${authenticationResponse.tokenType} ${authenticationResponse.accessToken}")
 
         HttpClient(url).post(body = body, headers = headers)
     }
@@ -74,7 +76,8 @@ class ActivityService(
             ))
         ))
 
-        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
+        val authenticationResponse = authenticationService.authenticate()
+        val headers = mapOf(HttpHeaders.AUTHORIZATION to "${authenticationResponse.tokenType} ${authenticationResponse.accessToken}")
 
         HttpClient(url).post(body = body, headers = headers)
     }
@@ -95,7 +98,8 @@ class ActivityService(
             ))
         ))
 
-        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
+        val authenticationResponse = authenticationService.authenticate()
+        val headers = mapOf(HttpHeaders.AUTHORIZATION to "${authenticationResponse.tokenType} ${authenticationResponse.accessToken}")
 
         HttpClient(url).post(body = body, headers = headers)
     }
@@ -106,7 +110,8 @@ class ActivityService(
             text = "Unknown command: $command"
         ))
 
-        val headers = mapOf("Authorization" to "Bearer ${authenticationService.getToken()}")
+        val authenticationResponse = authenticationService.authenticate()
+        val headers = mapOf(HttpHeaders.AUTHORIZATION to "${authenticationResponse.tokenType} ${authenticationResponse.accessToken}")
 
         HttpClient(url).post(body = body, headers = headers)
     }
